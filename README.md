@@ -1,47 +1,87 @@
 # Ramishka Trade Lookbook
 
 A standalone trade lookbook and line sheet for Ramishka — built for exhibition heads,
-buyers, and business partners. Static HTML/CSS/JS, no build step, no framework.
+buyers, and business partners. The presentation is static HTML/CSS/JS; live product
+content comes from Shopify through a Netlify Function.
 
 This is a **separate deliverable** from the main Ramishka website
 (`/Users/sambhavjain/Ramishka website /ramishka`). It reuses that codebase's design
-tokens, product copy, and photography as a read-only source — nothing in the website
-repo was modified to produce this.
+tokens and editorial photography as a read-only source — nothing in the website repo
+was modified to produce this.
 
 ## What's here
 
 - `index.html` — the full lookbook: cover, brand statement, editorial spread, six
-  silhouette-family chapters (Bloom, Muse, Fleur, Fleur Co-ord, Lily, Rivière) covering
-  all 16 current pieces, fabric guide, line sheet, trade terms, and an enquiry form.
+  silhouette-family chapters (Bloom, Muse, Fleur, Fleur Co-ord, Lily, Rivière), fabric
+  guide, line sheet, trade terms, and an enquiry form. Product cards and line-sheet
+  rows are render mounts rather than separate hardcoded catalogues.
+- `netlify/functions/products.js` — queries Shopify Storefront API `2026-07`, filters
+  products to the `lookbook` display surface, validates and sorts their lookbook order,
+  and returns the safe normalized catalogue used by the browser.
+- `assets/js/products.js` — loads the normalized response once and renders both product
+  cards and line-sheet rows from the same in-memory dataset.
 - `assets/css/lookbook.css` — design tokens ported from the website's
   `app/globals.css` `@theme` block (colour, type scale, radius, shadow, motion easing),
   plus layout, scroll-reveal, and a `@media print` stylesheet for a clean paginated
   PDF export.
-- `assets/js/reveal.js` — `IntersectionObserver`-driven scroll reveals (respects
-  `prefers-reduced-motion`).
+- `assets/js/reveal.js` — `IntersectionObserver`-driven scroll reveals, including
+  dynamically rendered product cards, and respects `prefers-reduced-motion`.
 - `assets/js/enquiry.js` — posts the enquiry form to a Supabase table via the REST API.
-- `assets/images/` — ~40 images curated and downscaled (via macOS `sips`, 1800px/JPEG
-  q82) from the website's `public/images/hero`, `editorial`, `products`, and `brand`
-  folders. Total ~14MB, versus 197MB of untouched source.
+- `assets/images/` — curated editorial imagery and the previous local product images.
+  Product cards now use the first two Shopify CDN images returned by the function.
+
+## Shopify environment
+
+Copy `.env.example` to `.env` and supply the live values for:
+
+- `SHOPIFY_STORE_DOMAIN` — the store's `*.myshopify.com` hostname.
+- `SHOPIFY_STOREFRONT_PRIVATE_TOKEN` — a private Storefront API token with product
+  listing and storefront metafield access.
+
+The private token is read only inside the Netlify Function. Do not put it in HTML,
+browser JavaScript, query parameters, or committed files. No Admin API credential is
+used or required. In Netlify, configure both values in the site environment with the
+Functions runtime scope.
 
 ## Viewing it locally
 
-No build step. Either:
-- Double-click `index.html`, or
-- `cd "/Users/sambhavjain/Ramishkan Lookbook" && npx serve .`
+Because the product catalogue uses a Netlify Function, run the site through Netlify
+Dev rather than opening `index.html` directly:
+
+```bash
+cd "/Users/sambhavjain/Ramishkan Lookbook"
+npx netlify-cli dev
+```
+
+Open the local URL printed by Netlify. The browser calls
+`/.netlify/functions/products`, just as it will in production.
+
+## Tests
+
+The test suite uses Node's built-in runner and has no package dependencies:
+
+```bash
+npm test
+```
+
+It covers Storefront pagination and failure handling, lookbook filtering, numeric
+ordering and integrity checks, response normalization, canonical URLs, token
+non-disclosure, and reuse of the same response dataset for product cards and
+line-sheet rows.
 
 ## Deploying to Netlify
 
-Netlify CLI isn't installed globally; use `npx` (Node 22 is already present):
+Netlify CLI isn't installed globally; use `npx`:
 
 ```bash
 cd "/Users/sambhavjain/Ramishkan Lookbook"
 npx netlify-cli deploy          # draft URL first — check it before going live
-npx netlify-cli deploy --prod   # promote once confirmed
+npx netlify-cli deploy --prod   # promote only after explicit approval
 ```
 
-`netlify.toml` sets the publish directory to `.` and adds basic security headers plus
-long-cache headers for images/CSS/JS.
+`netlify.toml` sets the publish and function directories, enables function bundling,
+and adds basic security headers plus cache headers for static assets. The product
+function separately sets a five-minute durable CDN cache on successful responses.
 
 ## Wiring up the enquiry form (Supabase)
 
@@ -82,10 +122,9 @@ Until those are filled in, the form shows a friendly fallback message pointing t
 
 ## Commercial content still needed
 
-The website's product catalogue only has **retail** pricing (₹4,500–6,000 base,
-+₹0–1,500 per fabric upgrade) — no wholesale terms exist anywhere in the source. The
-line sheet publishes retail prices, clearly labelled, and the Trade Terms section has
-visible `[ To be confirmed ]` placeholders for:
+The product catalogue publishes retail prices from Shopify. No wholesale terms exist
+in the current source. The Trade Terms section has visible `[ To be confirmed ]`
+placeholders for:
 
 - Minimum order quantity
 - Wholesale / trade margin
@@ -98,7 +137,8 @@ section) once the real terms are set.
 ## Asset provenance note
 
 `products/verdelle-dress-*.png` in the source website is a legacy filename that
-actually holds photography for the **Lime Rivière Dress** (not a "Verdelle" garment) —
-this lookbook labels it correctly. If re-running the asset pipeline from source, watch
-for this and for the unused duplicate files with spaces in their names
-(`reviere dress 1.png`, `Wine fleur co-ord set 4.png`, etc.).
+actually holds photography for the **Lime Rivière Dress** (not a "Verdelle" garment).
+If re-running the old local asset pipeline from source, watch for this and for unused
+duplicate files with spaces in their names (`reviere dress 1.png`,
+`Wine fleur co-ord set 4.png`, etc.). These local product images are no longer used by
+the live catalogue renderer.

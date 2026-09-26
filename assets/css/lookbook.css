@@ -472,6 +472,15 @@ img { max-width: 100%; display: block; }
   margin-right: 0.4rem;
 }
 
+.catalog-status {
+  min-height: 1.5em;
+  margin-top: 2rem;
+  color: var(--color-taupe);
+  font-size: var(--text-small);
+  text-align: center;
+}
+.catalog-status[hidden] { display: none; }
+
 /* ============================================================
    FABRIC STRIP
    ============================================================ */

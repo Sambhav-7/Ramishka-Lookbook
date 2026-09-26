@@ -17,7 +17,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231a1a1a'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' fill='%23ffffff' text-anchor='middle'%3ER%3C/text%3E%3C/svg%3E" />
 <link rel="stylesheet" href="assets/css/lookbook.css" />
 </head>
-<body>
+<body class="catalog-loading">
 
 <div class="grain" aria-hidden="true"></div>
 
@@ -82,6 +82,10 @@
 
 <main id="chapters">
 
+  <div class="container">
+    <p class="catalog-status" id="catalog-status" role="status">Loading the collection…</p>
+  </div>
+
   <!-- ============ CHAPTER 01 — BLOOM ============ -->
   <section class="section chapter">
     <div class="container">
@@ -96,41 +100,7 @@
         </div>
       </div>
 
-      <div class="pieces">
-        <article class="piece reveal" data-delay="0">
-          <div class="piece__frame">
-            <img class="piece__img--main" src="assets/images/rose-bloom-1.jpg" alt="Rosé Bloom Dress, front view" loading="lazy" />
-            <img class="piece__img--alt" src="assets/images/rose-bloom-2.jpg" alt="Rosé Bloom Dress, alternate view" loading="lazy" />
-            <span class="piece__badge">Best Seller</span>
-          </div>
-          <h4 class="piece__name">Rosé Bloom Dress</h4>
-          <p class="piece__colour">Blush Pink</p>
-          <p class="piece__desc">A timeless blush pink A-line dress featuring an elegant handcrafted floral applique with cascading draped detailing at the waist. Designed to offer effortless sophistication, it blends feminine charm with everyday comfort.</p>
-          <p class="piece__price"><span class="label">Retail</span>₹5,000</p>
-        </article>
-
-        <article class="piece reveal" data-delay="80">
-          <div class="piece__frame">
-            <img class="piece__img--main" src="assets/images/lime-bloom-1.jpg" alt="Lime Bloom Dress, front view" loading="lazy" />
-            <img class="piece__img--alt" src="assets/images/lime-bloom-2.jpg" alt="Lime Bloom Dress, alternate view" loading="lazy" />
-          </div>
-          <h4 class="piece__name">Lime Bloom Dress</h4>
-          <p class="piece__colour">Lime Green</p>
-          <p class="piece__desc">A vibrant lime green sleeveless midi dress featuring a flattering V-neckline with a handcrafted floral waist detail and elegant cascading drape. Designed to make a graceful statement while offering effortless comfort and sophistication.</p>
-          <p class="piece__price"><span class="label">Retail</span>₹5,000</p>
-        </article>
-
-        <article class="piece reveal" data-delay="160">
-          <div class="piece__frame">
-            <img class="piece__img--main" src="assets/images/soleil-bloom-1.jpg" alt="Soleil Bloom Dress, front view" loading="lazy" />
-            <img class="piece__img--alt" src="assets/images/soleil-bloom-2.jpg" alt="Soleil Bloom Dress, alternate view" loading="lazy" />
-          </div>
-          <h4 class="piece__name">Soleil Bloom Dress</h4>
-          <p class="piece__colour">Butter Yellow</p>
-          <p class="piece__desc">A radiant butter yellow sleeveless midi dress featuring a flattering V-neckline with a handcrafted floral waist detail and elegant cascading drape. Designed to make a graceful statement while offering effortless comfort and sophistication.</p>
-          <p class="piece__price"><span class="label">Retail</span>₹5,000</p>
-        </article>
-      </div>
+      <div class="pieces" data-products-family="Bloom" aria-busy="true"></div>
     </div>
   </section>
 
@@ -148,41 +118,7 @@
         </div>
       </div>
 
-      <div class="pieces">
-        <article class="piece reveal" data-delay="0">
-          <div class="piece__frame">
-            <img class="piece__img--main" src="assets/images/blue-muse-1.jpg" alt="Blue Muse Dress, front view" loading="lazy" />
-            <img class="piece__img--alt" src="assets/images/blue-muse-2.jpg" alt="Blue Muse Dress, alternate view" loading="lazy" />
-            <span class="piece__badge">Best Seller</span>
-          </div>
-          <h4 class="piece__name">Blue Muse Dress</h4>
-          <p class="piece__colour">Denim Blue</p>
-          <p class="piece__desc">A timeless shirt-collar midi dress designed with tailored structure and graceful movement for effortless everyday elegance. Finished with contrast stitching and a flowing handkerchief hem, it blends modern sophistication with classic charm.</p>
-          <p class="piece__price"><span class="label">Retail</span>₹6,000</p>
-        </article>
-
-        <article class="piece reveal" data-delay="80">
-          <div class="piece__frame">
-            <img class="piece__img--main" src="assets/images/midnight-muse-1.jpg" alt="Midnight Muse Dress, front view" loading="lazy" />
-            <img class="piece__img--alt" src="assets/images/midnight-muse-2.jpg" alt="Midnight Muse Dress, alternate view" loading="lazy" />
-          </div>
-          <h4 class="piece__name">Midnight Muse Dress</h4>
-          <p class="piece__colour">Black</p>
-          <p class="piece__desc">A timeless black statement dress tailored with precision, featuring contrast topstitching, sculpted lines, and an elegant handkerchief hem. Designed to blend structured sophistication with effortless femininity for every occasion.</p>
-          <p class="piece__price"><span class="label">Retail</span>₹6,000</p>
-        </article>
-
-        <article class="piece reveal" data-delay="160">
-          <div class="piece__frame">
-            <img class="piece__img--main" src="assets/images/olive-muse-1.jpg" alt="Olive Muse Dress, front view" loading="lazy" />
-            <img class="piece__img--alt" src="assets/images/olive-muse-2.jpg" alt="Olive Muse Dress, alternate view" loading="lazy" />
-          </div>
-          <h4 class="piece__name">Olive Muse Dress</h4>
-          <p class="piece__colour">Olive</p>
-          <p class="piece__desc">A timeless olive-green midi dress designed with a tailored shirt collar, elegant contrast stitching, and a flowing handkerchief hem for effortless sophistication. Crafted to balance structure and femininity, it's a versatile piece for elevated everyday dressing.</p>
-          <p class="piece__price"><span class="label">Retail</span>₹6,000</p>
-        </article>
-      </div>
+      <div class="pieces" data-products-family="Muse" aria-busy="true"></div>
     </div>
   </section>
 
@@ -200,40 +136,7 @@
         </div>
       </div>
 
-      <div class="pieces">
-        <article class="piece reveal" data-delay="0">
-          <div class="piece__frame">
-            <img class="piece__img--main" src="assets/images/violet-fleur-1.jpg" alt="Violet Fleur Dress, front view" loading="lazy" />
-            <img class="piece__img--alt" src="assets/images/violet-fleur-2.jpg" alt="Violet Fleur Dress, alternate view" loading="lazy" />
-          </div>
-          <h4 class="piece__name">Violet Fleur Dress</h4>
-          <p class="piece__colour">Lavender</p>
-          <p class="piece__desc">A romantic lavender midi dress designed with sculptural floral appliqués and graceful gathered detailing for an effortlessly feminine silhouette. Soft volume, elegant draping, and timeless craftsmanship make it a refined statement for every occasion.</p>
-          <p class="piece__price"><span class="label">Retail</span>₹5,500</p>
-        </article>
-
-        <article class="piece reveal" data-delay="80">
-          <div class="piece__frame">
-            <img class="piece__img--main" src="assets/images/sky-fleur-1.jpg" alt="Sky Fleur Dress, front view" loading="lazy" />
-            <img class="piece__img--alt" src="assets/images/sky-fleur-2.jpg" alt="Sky Fleur Dress, alternate view" loading="lazy" />
-          </div>
-          <h4 class="piece__name">Sky Fleur Dress</h4>
-          <p class="piece__colour">Sky Blue</p>
-          <p class="piece__desc">Soft, feminine, and effortlessly elegant, the Sky Fleur Dress is designed to bring timeless charm to every occasion. Delicate floral appliqués and a flowing silhouette create a graceful look that feels both modern and romantic.</p>
-          <p class="piece__price"><span class="label">Retail</span>₹5,500</p>
-        </article>
-
-        <article class="piece reveal" data-delay="160">
-          <div class="piece__frame">
-            <img class="piece__img--main" src="assets/images/soleil-fleur-1.jpg" alt="Soleil Fleur Dress, front view" loading="lazy" />
-            <img class="piece__img--alt" src="assets/images/soleil-fleur-2.jpg" alt="Soleil Fleur Dress, alternate view" loading="lazy" />
-          </div>
-          <h4 class="piece__name">Soleil Fleur Dress</h4>
-          <p class="piece__colour">Sunshine Yellow</p>
-          <p class="piece__desc">A radiant sunshine-yellow midi dress designed to capture effortless femininity with delicate floral appliqué detailing at the waist. The Soleil Fleur Dress blends graceful movement with timeless elegance for every special moment.</p>
-          <p class="piece__price"><span class="label">Retail</span>₹5,500</p>
-        </article>
-      </div>
+      <div class="pieces" data-products-family="Fleur" aria-busy="true"></div>
     </div>
   </section>
 
@@ -251,29 +154,7 @@
         </div>
       </div>
 
-      <div class="pieces">
-        <article class="piece reveal" data-delay="0">
-          <div class="piece__frame">
-            <img class="piece__img--main" src="assets/images/mint-fleur-coord-1.jpg" alt="Mint Green Fleur Co-ord Set, front view" loading="lazy" />
-            <img class="piece__img--alt" src="assets/images/mint-fleur-coord-2.jpg" alt="Mint Green Fleur Co-ord Set, alternate view" loading="lazy" />
-          </div>
-          <h4 class="piece__name">Mint Green Fleur Co-ord Set</h4>
-          <p class="piece__colour">Mint Green</p>
-          <p class="piece__desc">The Mint Green Fleur Co-ord Set is a graceful blend of feminine elegance and effortless sophistication, designed to make every occasion feel special. Delicate floral appliqués, soft gathers, and a flowing silhouette create a refined statement with timeless charm.</p>
-          <p class="piece__price"><span class="label">Retail</span>₹6,000</p>
-        </article>
-
-        <article class="piece reveal" data-delay="80">
-          <div class="piece__frame">
-            <img class="piece__img--main" src="assets/images/wine-fleur-coord-1.jpg" alt="Wine Fleur Co-ord Set, front view" loading="lazy" />
-            <img class="piece__img--alt" src="assets/images/wine-fleur-coord-2.jpg" alt="Wine Fleur Co-ord Set, alternate view" loading="lazy" />
-          </div>
-          <h4 class="piece__name">Wine Fleur Co-ord Set</h4>
-          <p class="piece__colour">Wine</p>
-          <p class="piece__desc">A romantic wine-toned co-ord featuring a softly gathered peplum top, sculptural puff sleeves and delicate floral appliqué detailing at the waist. Paired with relaxed wide-leg trousers, it creates an effortlessly elegant silhouette with a refined feminine character.</p>
-          <p class="piece__price"><span class="label">Retail</span>₹6,000</p>
-        </article>
-      </div>
+      <div class="pieces" data-products-family="Fleur Co-ord" aria-busy="true"></div>
     </div>
   </section>
 
@@ -291,41 +172,7 @@
         </div>
       </div>
 
-      <div class="pieces">
-        <article class="piece reveal" data-delay="0">
-          <div class="piece__frame">
-            <img class="piece__img--main" src="assets/images/rosalie-lily-1.jpg" alt="Rosalie Shirt Dress, front view" loading="lazy" />
-            <img class="piece__img--alt" src="assets/images/rosalie-lily-2.jpg" alt="Rosalie Shirt Dress, alternate view" loading="lazy" />
-            <span class="piece__badge">Best Seller</span>
-          </div>
-          <h4 class="piece__name">Rosalie Shirt Dress</h4>
-          <p class="piece__colour">Blush Pink</p>
-          <p class="piece__desc">A timeless shirt dress in a soft blush pink hue, designed to bring effortless elegance to everyday dressing. Delicate floral embroidery and clean tailoring create a refined look that's both feminine and versatile.</p>
-          <p class="piece__price"><span class="label">Retail</span>₹4,500</p>
-        </article>
-
-        <article class="piece reveal" data-delay="80">
-          <div class="piece__frame">
-            <img class="piece__img--main" src="assets/images/lemon-lily-1.jpg" alt="Lemon Lily Shirt Dress, front view" loading="lazy" />
-            <img class="piece__img--alt" src="assets/images/lemon-lily-2.jpg" alt="Lemon Lily Shirt Dress, alternate view" loading="lazy" />
-          </div>
-          <h4 class="piece__name">Lemon Lily Shirt Dress</h4>
-          <p class="piece__colour">Lemon Yellow</p>
-          <p class="piece__desc">A refreshing pastel yellow shirt dress designed with delicate floral embroidery and crisp white piping for a timeless, feminine look. Crafted to offer effortless elegance, it's perfect for sunny brunches, weekend getaways, and everyday sophistication.</p>
-          <p class="piece__price"><span class="label">Retail</span>₹4,500</p>
-        </article>
-
-        <article class="piece reveal" data-delay="160">
-          <div class="piece__frame">
-            <img class="piece__img--main" src="assets/images/bleu-lily-1.jpg" alt="Bleu Lily Shirt Dress, front view" loading="lazy" />
-            <img class="piece__img--alt" src="assets/images/bleu-lily-2.jpg" alt="Bleu Lily Shirt Dress, alternate view" loading="lazy" />
-          </div>
-          <h4 class="piece__name">Bleu Lily Shirt Dress</h4>
-          <p class="piece__colour">Powder Blue</p>
-          <p class="piece__desc">Effortlessly elegant and refreshingly feminine, the Bleu Lily Shirt Dress blends timeless tailoring with delicate floral charm. Crafted for everyday sophistication, it offers a polished silhouette with understated luxury.</p>
-          <p class="piece__price"><span class="label">Retail</span>₹4,500</p>
-        </article>
-      </div>
+      <div class="pieces" data-products-family="Lily" aria-busy="true"></div>
     </div>
   </section>
 
@@ -343,30 +190,7 @@
         </div>
       </div>
 
-      <div class="pieces">
-        <article class="piece reveal" data-delay="0">
-          <div class="piece__frame">
-            <img class="piece__img--main" src="assets/images/lime-riviere-1.jpg" alt="Lime Rivière Dress, front view" loading="lazy" />
-            <img class="piece__img--alt" src="assets/images/lime-riviere-2.jpg" alt="Lime Rivière Dress, alternate view" loading="lazy" />
-            <span class="piece__badge">Limited</span>
-          </div>
-          <h4 class="piece__name">Lime Rivière Dress</h4>
-          <p class="piece__colour">Lime Green</p>
-          <p class="piece__desc">A fresh and feminine midi designed to make effortless elegance your everyday statement. Cascading ruffle sleeves and soft box pleats make it the perfect blend of sophistication and comfort.</p>
-          <p class="piece__price"><span class="label">Retail</span>₹4,500</p>
-        </article>
-
-        <article class="piece reveal" data-delay="80">
-          <div class="piece__frame">
-            <img class="piece__img--main" src="assets/images/powder-riviere-1.jpg" alt="Powder Blue Rivière Dress, front view" loading="lazy" />
-            <img class="piece__img--alt" src="assets/images/powder-riviere-2.jpg" alt="Powder Blue Rivière Dress, alternate view" loading="lazy" />
-          </div>
-          <h4 class="piece__name">Powder Blue Rivière Dress</h4>
-          <p class="piece__colour">Powder Blue</p>
-          <p class="piece__desc">A graceful powder-blue dress defined by cascading ruffle sleeves and a softly flowing, pleated silhouette. Designed to feel feminine, effortless, and refined, with movement that makes the dress stand out without feeling overstated.</p>
-          <p class="piece__price"><span class="label">Retail</span>₹4,500</p>
-        </article>
-      </div>
+      <div class="pieces" data-products-family="Rivière" aria-busy="true"></div>
     </div>
   </section>
 
@@ -437,24 +261,7 @@
               <th>Retail (INR)</th>
             </tr>
           </thead>
-          <tbody>
-            <tr><td class="linesheet__family">Bloom</td><td class="linesheet__piece">Rosé Bloom Dress</td><td>Blush Pink</td><td>XS – XL</td><td>₹5,000</td></tr>
-            <tr><td class="linesheet__family">Bloom</td><td class="linesheet__piece">Lime Bloom Dress</td><td>Lime Green</td><td>XS – XL</td><td>₹5,000</td></tr>
-            <tr><td class="linesheet__family">Bloom</td><td class="linesheet__piece">Soleil Bloom Dress</td><td>Butter Yellow</td><td>XS – XL</td><td>₹5,000</td></tr>
-            <tr><td class="linesheet__family">Muse</td><td class="linesheet__piece">Blue Muse Dress</td><td>Denim Blue</td><td>XS – XL</td><td>₹6,000</td></tr>
-            <tr><td class="linesheet__family">Muse</td><td class="linesheet__piece">Midnight Muse Dress</td><td>Black</td><td>XS – XL</td><td>₹6,000</td></tr>
-            <tr><td class="linesheet__family">Muse</td><td class="linesheet__piece">Olive Muse Dress</td><td>Olive</td><td>XS – XL</td><td>₹6,000</td></tr>
-            <tr><td class="linesheet__family">Fleur</td><td class="linesheet__piece">Violet Fleur Dress</td><td>Lavender</td><td>XS – XL</td><td>₹5,500</td></tr>
-            <tr><td class="linesheet__family">Fleur</td><td class="linesheet__piece">Sky Fleur Dress</td><td>Sky Blue</td><td>XS – XL</td><td>₹5,500</td></tr>
-            <tr><td class="linesheet__family">Fleur</td><td class="linesheet__piece">Soleil Fleur Dress</td><td>Sunshine Yellow</td><td>XS – XL</td><td>₹5,500</td></tr>
-            <tr><td class="linesheet__family">Fleur Co-ord</td><td class="linesheet__piece">Mint Green Fleur Co-ord Set</td><td>Mint Green</td><td>XS – XL</td><td>₹6,000</td></tr>
-            <tr><td class="linesheet__family">Fleur Co-ord</td><td class="linesheet__piece">Wine Fleur Co-ord Set</td><td>Wine</td><td>XS – XL</td><td>₹6,000</td></tr>
-            <tr><td class="linesheet__family">Lily</td><td class="linesheet__piece">Rosalie Shirt Dress</td><td>Blush Pink</td><td>XS – XL</td><td>₹4,500</td></tr>
-            <tr><td class="linesheet__family">Lily</td><td class="linesheet__piece">Lemon Lily Shirt Dress</td><td>Lemon Yellow</td><td>XS – XL</td><td>₹4,500</td></tr>
-            <tr><td class="linesheet__family">Lily</td><td class="linesheet__piece">Bleu Lily Shirt Dress</td><td>Powder Blue</td><td>XS – XL</td><td>₹4,500</td></tr>
-            <tr><td class="linesheet__family">Rivière</td><td class="linesheet__piece">Lime Rivière Dress</td><td>Lime Green</td><td>XS – XL</td><td>₹4,500</td></tr>
-            <tr><td class="linesheet__family">Rivière</td><td class="linesheet__piece">Powder Blue Rivière Dress</td><td>Powder Blue</td><td>XS – XL</td><td>₹4,500</td></tr>
-          </tbody>
+          <tbody data-products-linesheet></tbody>
         </table>
       </div>
     </div>
@@ -569,6 +376,7 @@
   </div>
 </footer>
 
+<script src="assets/js/products.js"></script>
 <script src="assets/js/reveal.js"></script>
 <script src="assets/js/enquiry.js"></script>
 </body>

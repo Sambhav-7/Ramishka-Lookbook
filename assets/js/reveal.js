@@ -3,11 +3,9 @@
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  var els = document.querySelectorAll(".reveal");
-  if (reduceMotion || !("IntersectionObserver" in window)) {
-    els.forEach(function (el) { el.classList.add("is-visible"); });
-  } else {
-    var observer = new IntersectionObserver(
+  var observer = null;
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    observer = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
@@ -21,8 +19,21 @@
       },
       { threshold: 0.15, rootMargin: "0px 0px -8% 0px" }
     );
-    els.forEach(function (el) { observer.observe(el); });
   }
+
+  function observeRevealElements(scope) {
+    var els = scope.querySelectorAll(".reveal:not([data-reveal-bound])");
+    els.forEach(function (el) {
+      el.setAttribute("data-reveal-bound", "true");
+      if (observer) observer.observe(el);
+      else el.classList.add("is-visible");
+    });
+  }
+
+  observeRevealElements(document);
+  document.addEventListener("ramishka:catalog-rendered", function () {
+    observeRevealElements(document);
+  });
 
   var nav = document.querySelector(".nav");
   if (nav) {
