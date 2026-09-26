@@ -45,7 +45,7 @@ test("keeps product cards non-clickable to preserve the existing interaction pat
   assert.equal(markup.cardsByFamily.Bloom.includes("<a "), false);
 });
 
-test("does not partially update the DOM when a family has no existing chapter mount", () => {
+test("does not crash the catalogue when a product belongs to an unmounted/unknown family", () => {
   const bloomMount = { dataset: { productsFamily: "Bloom" }, innerHTML: "unchanged" };
   const lineSheetMount = { innerHTML: "unchanged" };
   const documentStub = {
@@ -57,13 +57,51 @@ test("does not partially update the DOM when a family has no existing chapter mo
     },
     dispatchEvent() {},
   };
+  const originalWarn = console.warn;
+  const warnings = [];
+  console.warn = (message) => warnings.push(message);
 
-  assert.throws(
-    () => renderCatalog([product({ family: "Unknown" })], documentStub),
-    /no chapter mount/i,
+  try {
+    renderCatalog([product(), product({ family: "Unknown", title: "Stray Piece" })], documentStub);
+  } finally {
+    console.warn = originalWarn;
+  }
+
+  assert.match(bloomMount.innerHTML, /Rosé Bloom Dress/);
+  assert.match(lineSheetMount.innerHTML, /Stray Piece/);
+  assert.equal(warnings.length, 1);
+  assert.match(warnings[0], /no chapter mount/i);
+});
+
+test("renders the Halter Neck chapter mount alongside existing chapters", () => {
+  const bloomMount = { dataset: { productsFamily: "Bloom" }, innerHTML: "" };
+  const halterMount = { dataset: { productsFamily: "Halter Neck" }, innerHTML: "" };
+  const lineSheetMount = { innerHTML: "" };
+  const documentStub = {
+    querySelectorAll() {
+      return [bloomMount, halterMount];
+    },
+    querySelector() {
+      return lineSheetMount;
+    },
+    dispatchEvent() {},
+  };
+
+  renderCatalog(
+    [
+      product(),
+      product({
+        family: "Halter Neck",
+        title: "Butter Yellow Halter Neck Dress",
+        colour: "Butter Yellow",
+      }),
+    ],
+    documentStub,
   );
-  assert.equal(bloomMount.innerHTML, "unchanged");
-  assert.equal(lineSheetMount.innerHTML, "unchanged");
+
+  assert.match(bloomMount.innerHTML, /Rosé Bloom Dress/);
+  assert.match(halterMount.innerHTML, /Butter Yellow Halter Neck Dress/);
+  assert.match(lineSheetMount.innerHTML, /Butter Yellow Halter Neck Dress/);
 });
 
 test("renders every product into both the chapter cards and line sheet", () => {

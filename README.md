@@ -11,13 +11,15 @@ was modified to produce this.
 
 ## What's here
 
-- `index.html` — the full lookbook: cover, brand statement, editorial spread, six
-  silhouette-family chapters (Bloom, Muse, Fleur, Fleur Co-ord, Lily, Rivière), fabric
-  guide, line sheet, trade terms, and an enquiry form. Product cards and line-sheet
-  rows are render mounts rather than separate hardcoded catalogues.
-- `netlify/functions/products.js` — queries Shopify Storefront API `2026-07`, filters
-  products to the `lookbook` display surface, validates and sorts their lookbook order,
-  and returns the safe normalized catalogue used by the browser.
+- `index.html` — the full lookbook: cover, brand statement, editorial spread, seven
+  silhouette-family chapters (Bloom, Muse, Fleur, Fleur Co-ord, Lily, Rivière, Halter
+  Neck), fabric guide, line sheet, trade terms, and an enquiry form. Product cards and
+  line-sheet rows are render mounts rather than separate hardcoded catalogues.
+- `netlify/functions/products.js` — queries Shopify Storefront API `2026-07` for every
+  product in the store, ordered `CREATED_AT` descending (newest first) — no metafield
+  gates and no manual ordering. Each product is validated and normalized independently;
+  a malformed or unclassifiable product is skipped with a server-side warning rather
+  than failing the whole response.
 - `assets/js/products.js` — loads the normalized response once and renders both product
   cards and line-sheet rows from the same in-memory dataset.
 - `assets/css/lookbook.css` — design tokens ported from the website's
@@ -36,7 +38,7 @@ Copy `.env.example` to `.env` and supply the live values for:
 
 - `SHOPIFY_STORE_DOMAIN` — the store's `*.myshopify.com` hostname.
 - `SHOPIFY_STOREFRONT_PRIVATE_TOKEN` — a private Storefront API token with product
-  listing and storefront metafield access.
+  listing access.
 
 The private token is read only inside the Netlify Function. Do not put it in HTML,
 browser JavaScript, query parameters, or committed files. No Admin API credential is
@@ -64,10 +66,11 @@ The test suite uses Node's built-in runner and has no package dependencies:
 npm test
 ```
 
-It covers Storefront pagination and failure handling, lookbook filtering, numeric
-ordering and integrity checks, response normalization, canonical URLs, token
-non-disclosure, and reuse of the same response dataset for product cards and
-line-sheet rows.
+It covers Storefront pagination and failure handling, CREATED_AT ordering, family
+classification (including Halter Neck) and colour derivation, per-product integrity
+checks (a malformed or unmapped-family product is skipped, not fatal), response
+normalization, canonical URLs, token non-disclosure, and reuse of the same response
+dataset for product cards and line-sheet rows.
 
 ## Deploying to Netlify
 

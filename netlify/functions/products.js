@@ -9,13 +9,14 @@ const ERROR_MESSAGE = "Lookbook products are temporarily unavailable.";
 
 const PRODUCT_QUERY = `
   query LookbookProducts($first: Int!, $after: String) {
-    products(first: $first, after: $after) {
+    products(first: $first, after: $after, sortKey: CREATED_AT, reverse: true) {
       nodes {
         title
         handle
         description
         productType
         tags
+        createdAt
         images(first: 2) {
           nodes {
             url
@@ -34,12 +35,6 @@ const PRODUCT_QUERY = `
             currencyCode
           }
         }
-        displaySurfaces: metafield(namespace: "ramishka", key: "display_surfaces") {
-          value
-        }
-        lookbookOrder: metafield(namespace: "ramishka", key: "lookbook_order") {
-          value
-        }
       }
       pageInfo {
         hasNextPage
@@ -53,19 +48,6 @@ class ProductIntegrityError extends Error {
   constructor(message) {
     super(message);
     this.name = "ProductIntegrityError";
-  }
-}
-
-function parseSurfaces(metafield) {
-  if (!metafield || typeof metafield.value !== "string") return [];
-
-  try {
-    const surfaces = JSON.parse(metafield.value);
-    return Array.isArray(surfaces)
-      ? surfaces.filter((surface) => typeof surface === "string")
-      : [];
-  } catch (_error) {
-    return [];
   }
 }
 
@@ -110,20 +92,12 @@ function canonicalFamily(value) {
     "fleur coord": "Fleur Co-ord",
     lily: "Lily",
     riviere: "Rivière",
+    "halter neck": "Halter Neck",
   };
   return families[normalized] || "";
 }
 
-function familyFromOrder(order) {
-  if (order < 40) return "Bloom";
-  if (order < 70) return "Muse";
-  if (order < 100) return "Fleur";
-  if (order < 120) return "Fleur Co-ord";
-  if (order < 150) return "Lily";
-  return "Rivière";
-}
-
-function deriveFamily(product, order) {
+function deriveFamily(product) {
   const taggedFamily = readTaggedValue(product.tags, ["family", "lookbook family"]);
   const taggedMatch = canonicalFamily(taggedFamily);
   if (taggedMatch) return taggedMatch;
@@ -140,10 +114,11 @@ function deriveFamily(product, order) {
   if (title.includes("bloom")) return "Bloom";
   if (title.includes("muse")) return "Muse";
   if (title.includes("fleur")) return "Fleur";
+  if (title.includes("halter neck")) return "Halter Neck";
   if (title.includes("shirt dress")) return "Lily";
   if (title.includes("riviere")) return "Rivière";
 
-  return familyFromOrder(order);
+  return "";
 }
 
 function deriveColour(product) {
@@ -154,6 +129,8 @@ function deriveColour(product) {
     .replace(/\s+(?:Bloom|Muse|Fleur|Rivi(?:è|e)re)\s+Dress$/i, "")
     .replace(/\s+Lily\s+Shirt\s+Dress$/i, "")
     .replace(/\s+Shirt\s+Dress$/i, "")
+    .replace(/\s+Halter\s+Neck\s+Dress$/i, "")
+    .replace(/\s+Halter\s+Neck$/i, "")
     .trim();
   const colour = optionValues[0] || taggedColour || titleColour;
 
@@ -229,11 +206,18 @@ function normalizeProduct(product, order) {
     throw new ProductIntegrityError(`${title} has an invalid price.`);
   }
 
+  const family = deriveFamily(product);
+  if (!family) {
+    throw new ProductIntegrityError(
+      `${title} does not match any known lookbook chapter family.`,
+    );
+  }
+
   return {
     title,
     handle,
     description: typeof product.description === "string" ? product.description.trim() : "",
-    family: deriveFamily(product, order),
+    family,
     colour: deriveColour(product),
     sizes: deriveSizes(product),
     badge: deriveBadge(product.tags),
@@ -247,38 +231,38 @@ function normalizeProduct(product, order) {
   };
 }
 
-function normalizeLookbookProducts(rawProducts) {
-  const lookbookProducts = (rawProducts || []).filter((product) =>
-    parseSurfaces(product && product.displaySurfaces).includes("lookbook"),
-  );
+function describeForLog(product) {
+  const title = (product && typeof product.title === "string" && product.title.trim()) || "untitled product";
+  const handle = (product && typeof product.handle === "string" && product.handle.trim()) || "unknown handle";
+  return `${title} (handle: ${handle})`;
+}
 
-  if (!lookbookProducts.length) {
+function normalizeLookbookProducts(rawProducts, { logger = console } = {}) {
+  if (!Array.isArray(rawProducts) || !rawProducts.length) {
     throw new ProductIntegrityError("Shopify returned no lookbook products.");
   }
 
-  const seenOrders = new Set();
-  const normalizedProducts = lookbookProducts.map((product) => {
-    const value = product.lookbookOrder && product.lookbookOrder.value;
-    if (typeof value !== "string" || !/^-?\d+$/.test(value.trim())) {
-      throw new ProductIntegrityError(
-        `${product.title || "Product"} does not have a valid integer lookbook order.`,
-      );
+  const normalizedProducts = [];
+  rawProducts.forEach((product, index) => {
+    try {
+      normalizedProducts.push(normalizeProduct(product, index));
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : String(error);
+      const warn = typeof logger.warn === "function" ? logger.warn : logger.error;
+      if (typeof warn === "function") {
+        warn.call(
+          logger,
+          `[lookbook] Skipping malformed product — ${describeForLog(product)}: ${reason}`,
+        );
+      }
     }
-
-    const order = Number(value);
-    if (!Number.isSafeInteger(order)) {
-      throw new ProductIntegrityError(
-        `${product.title || "Product"} does not have a valid integer lookbook order.`,
-      );
-    }
-    if (seenOrders.has(order)) {
-      throw new ProductIntegrityError(`Duplicate lookbook order ${order}.`);
-    }
-    seenOrders.add(order);
-    return normalizeProduct(product, order);
   });
 
-  return normalizedProducts.sort((left, right) => left.order - right.order);
+  if (!normalizedProducts.length) {
+    throw new ProductIntegrityError("No Shopify products could be normalized for the lookbook.");
+  }
+
+  return normalizedProducts;
 }
 
 function normalizeStoreDomain(storeDomain) {
@@ -377,7 +361,7 @@ function createHandler({
         token: env.SHOPIFY_STOREFRONT_PRIVATE_TOKEN,
         buyerIp,
       });
-      const products = normalizeLookbookProducts(rawProducts);
+      const products = normalizeLookbookProducts(rawProducts, { logger });
       return jsonResponse(
         200,
         { products },

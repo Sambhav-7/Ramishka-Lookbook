@@ -152,8 +152,12 @@
     });
 
     Object.keys(markup.cardsByFamily).forEach(function (family) {
-      if (!mountsByFamily[family]) {
-        throw new Error('There is no chapter mount for Shopify product family "' + family + '".');
+      if (!mountsByFamily[family] && typeof console !== "undefined" && console.warn) {
+        console.warn(
+          'Ramishka lookbook: no chapter mount for product family "' +
+            family +
+            '" — its pieces are omitted from the chapters but still appear in the line sheet.',
+        );
       }
     });
 
