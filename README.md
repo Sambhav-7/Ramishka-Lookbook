@@ -11,7 +11,7 @@ was modified to produce this.
 
 ## What's here
 
-- `index.html` — the full lookbook: cover, brand statement, editorial spread, seven
+- `index.html` — the full lookbook: cover, brand statement, seven
   silhouette-family chapters (Bloom, Muse, Fleur, Fleur Co-ord, Lily, Rivière, Halter
   Neck), fabric guide, line sheet, trade terms, and an enquiry form. Product cards and
   line-sheet rows are render mounts rather than separate hardcoded catalogues.
